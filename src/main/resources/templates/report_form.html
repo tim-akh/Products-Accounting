@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать отчет</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/product/listProducts}">Продукты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/deal/listDeals}">Сделки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reserve/listReserves}">Запас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/report/createReport}">Отчет</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/listUsers}">Пользователи</a>
+                </li>
+                <div sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Выйти</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Войти</a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+<div class="container my-2">
+    <h1>Создать отчет</h1>
+    <h2>Укажите даты</h2>
+    <form action="#" th:action="@{/report/showReport}" th:object="${reportDates}" method="post">
+        <span th:if="${#fields.hasErrors('startDealDate')}" th:errors="*{startDealDate}" class="text-danger"></span><br>
+        <label for="startDealDate">Дата начала периода: </label>
+        <input id="startDealDate" type="date" th:field="*{startDealDate}"
+               class="form-control" />
+        <span th:if="${#fields.hasErrors('endDealDate')}" th:errors="*{endDealDate}" class="text-danger"></span><br>
+        <label for="endDealDate">Дата окончания периода: </label>
+        <input id="endDealDate" type="date" th:field="*{endDealDate}"
+               class="form-control mb-4" />
+        <button type="submit" class="btn btn-success">Создать отчет</button>
+    </form>
+</div>
+</body>
+</html>

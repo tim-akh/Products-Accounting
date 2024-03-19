@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить пользователя</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/product/listProducts}">Продукты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/deal/listDeals}">Сделки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reserve/listReserves}">Запас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/report/createReport}">Отчет</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/listUsers}">Пользователи</a>
+                </li>
+                <div sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Выйти</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Войти</a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    <div class="container my-2">
+        <h1>Список пользователей</h1>
+        <h2>Добавить нового пользователя</h2>
+        <form action="#" th:action="@{/user/saveUser}" th:object="${user}" method="post">
+            <label for="lastName" class="mt-4">Фамилия: </label>
+            <input id="lastName" type="text" th:field="*{lastName}"
+                   class="form-control mb-4" />
+            <label for="firstName" class="mt-4">Имя: </label>
+            <input id="firstName" type="text" th:field="*{firstName}"
+                   class="form-control mb-4" />
+            <label for="email" class="mt-4">Почта: </label>
+            <input id="email" type="text" th:field="*{email}"
+                   class="form-control mb-4" />
+            <label for="password" class="mt-4">Пароль: </label>
+            <input id="password" type="text" th:field="*{password}"
+                      class="form-control mb-4" />
+            <label for="role" class="mt-4">Роль: </label>
+            <select id="role" th:field="*{role}" class="form-control mb-4">
+                <option th:value="ROLE_MANAGER">Менеджер</option>
+                <option th:value="ROLE_ACCOUNTANT">Бухгалтер</option>
+                <option th:value="ROLE_ADMIN">Администратор</option>
+            </select>
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>

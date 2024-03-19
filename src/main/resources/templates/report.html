@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/product/listProducts}">Продукты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/deal/listDeals}">Сделки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reserve/listReserves}">Запас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/report/createReport}">Отчет</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/listUsers}">Пользователи</a>
+                </li>
+                <div sec:authorize="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Выйти</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Войти</a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+<div class="container my-2">
+    <h1>Отчет</h1>
+    <h5 class="mt-4">Сделки за указанный период</h5>
+    <table class="table table-striped table-responsive-md table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Продукт</th>
+            <th>Операция</th>
+            <th>Количество</th>
+            <th>Ед.</th>
+            <th>Цена за ед. (руб.)</th>
+            <th>Поток (руб.)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="deal : ${listDeals}">
+            <td th:text="${#dates.format(deal.dealDate, 'dd-MM-yyyy')}"></td>
+            <td th:text="${deal.product.name}"></td>
+            <td th:text="${deal.operation}"></td>
+            <td th:text="${deal.quantity}"></td>
+            <td th:text="${deal.unit}"></td>
+            <td th:text="${deal.priceForUnit}"></td>
+            <td th:switch="${deal.operation}">
+                <span th:case="'Покупка'">
+                    <div th:with="flow=${-deal.priceForUnit * deal.quantity}">
+                        <span th:text="${flow}"></span>
+                    </div>
+                </span>
+                <span th:case="'Продажа'">
+                    <div th:with="flow=${deal.priceForUnit * deal.quantity}">
+                        <span th:text="${flow}"></span>
+                    </div>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h5 class="mt-4">Итоговые потоки по продуктам (в руб.)</h5>
+    <table class="table table-striped table-responsive-md table-bordered mt-3">
+        <thead>
+            <tr>
+                <td>Продукт</td>
+                <td>Итоговый поток (в руб.)</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="flow : ${resultFlows}">
+                <td th:text="${flow.key}"></td>
+                <td th:text="${flow.value}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <b class="mt-4 mb-4">Итоговый поток (в руб.): </b><span th:text="${resultFlow}"></span>
+
+</div>
+</body>
+</html>
